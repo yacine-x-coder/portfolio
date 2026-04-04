@@ -107,20 +107,29 @@
             color: var(--accent-color);
         }
 
-        nav ul {
+        /* Hamburger Menu Icon */
+        .menu-toggle {
+            display: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .nav-menu {
             list-style: none;
             display: flex;
             gap: 30px;
         }
 
-        nav ul li a {
+        .nav-menu li a {
             color: white;
             text-decoration: none;
             text-transform: uppercase;
             transition: 0.3s;
         }
 
-        nav ul li a:hover {
+        .nav-menu li a:hover {
             color: var(--accent-color);
         }
 
@@ -435,9 +444,62 @@
             }
         }
 
+        /* --- MOBILE RESPONSIVENESS FIXES --- */
         @media (max-width: 992px) {
             .hero h1 {
-                font-size: 3.5rem;
+                font-size: 4rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3.2rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            /* Navbar Mobile Fix */
+            .menu-toggle {
+                display: block;
+                /* Show hamburger icon */
+            }
+
+            .nav-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 15, 44, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                align-items: center;
+                gap: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s ease;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            }
+
+            .nav-menu.active {
+                max-height: 400px;
+                /* Expands menu when active */
+            }
+
+            .nav-menu li {
+                width: 100%;
+                text-align: center;
+                padding: 15px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+            section {
+                padding: 60px 5%;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -451,7 +513,10 @@
 
     <nav id="navbar">
         <a href="#home" class="logo">YACINE<span>.</span></a>
-        <ul>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="nav-menu" id="nav-menu">
             <li><a href="#home">Home</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#projects">Projects</a></li>
@@ -501,7 +566,6 @@
     <section id="projects">
         <h2 class="section-title">My Projects</h2>
 
-        <!-- أزرار الفلترة (Catigouri) -->
         <div class="filter-container">
             <button class="filter-btn active" data-filter="all">ALL</button>
             <button class="filter-btn" data-filter="design">DESIGN</button>
@@ -509,7 +573,6 @@
         </div>
 
         <div class="projects-grid">
-            <!-- مشروع 1 -->
             <div class="project-card tilt-element" data-category="development">
                 <div class="project-img-container">
                     <img src="./images/htmlweb.jpg" alt="HTML Web">
@@ -519,7 +582,6 @@
                     <p>Structured layout and web pages.</p>
                 </div>
             </div>
-            <!-- مشروع 2 -->
             <div class="project-card tilt-element" data-category="development">
                 <div class="project-img-container">
                     <img src="c:\Users\PC\Desktop\ai code way generat ai homework\téléchargement (2).jpg"
@@ -530,7 +592,6 @@
                     <p>Advanced calculator built with pure JS.</p>
                 </div>
             </div>
-            <!-- مشروع 3 -->
             <div class="project-card tilt-element" data-category="development">
                 <div class="project-img-container">
                     <img src="c:\Users\PC\Desktop\ai code way generat ai homework\téléchargement (3).jpg"
@@ -542,17 +603,15 @@
                 </div>
             </div>
 
-            <!-- مشروع 4 (Design) -->
             <div class="project-card tilt-element" data-category="design">
                 <div class="project-img-container">
-                    <img src="./images/smoothie.png">
+                    <img src="./images/smoothie.png" alt="Smoothie Ad">
                 </div>
                 <div class="project-info">
                     <h3>Smoothie Ad Design</h3>
                     <p>Modern Interface and Styling.</p>
                 </div>
             </div>
-            <!-- مشروع 5 -->
             <div class="project-card tilt-element" data-category="development">
                 <div class="project-img-container">
                     <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=500&q=80"
@@ -563,16 +622,14 @@
                     <p>AI Powered Art Generation Tool.</p>
                 </div>
             </div>
-            <!-- مشروع 6 -->
             <div class="project-card tilt-element" data-category="design">
                 <div class="project-img-container">
-                    <img src="./images/book.jpg" alt="Python Artiva">
+                    <img src="./images/book.jpg" alt="Book Cover">
                 </div>
                 <div class="project-info">
                     <h3>Book Cover Design</h3>
                     <p>This is an AI generated Book cover</p>
                 </div>
-
             </div>
         </div>
     </section>
@@ -613,6 +670,31 @@
     </section>
 
     <script>
+        // --- NEW: Mobile Menu Toggle ---
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+        const menuIcon = mobileMenu.querySelector('i');
+
+        mobileMenu.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            if (navMenu.classList.contains('active')) {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-times');
+            } else {
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            }
+        });
+
+        // Close menu when a link is clicked (Mobile)
+        document.querySelectorAll('.nav-menu li a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            });
+        });
+
         // 1. Navbar scroll effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
@@ -640,41 +722,56 @@
         document.querySelectorAll('section').forEach(sec => observer.observe(sec));
         document.querySelectorAll('.progress').forEach(bar => observer.observe(bar));
 
-        // 3. 3D Tilt Effect for Project Cards
+        // 3. FIXED: 3D Tilt Effect for Project Cards (Added Mobile Touch Support)
         const projectCards = document.querySelectorAll('.project-card');
+
+        function applyTilt(card, clientX, clientY) {
+            const rect = card.getBoundingClientRect();
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+            const midWidth = rect.width / 2;
+            const midHeight = rect.height / 2;
+            const angleY = (x - midWidth) / 10;
+            const angleX = (midHeight - y) / 10;
+            card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.05)`;
+        }
+
+        function resetTilt(card) {
+            card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+        }
+
         projectCards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const midWidth = rect.width / 2;
-                const midHeight = rect.height / 2;
-                const angleY = (x - midWidth) / 10;
-                const angleX = (midHeight - y) / 10;
-                card.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg) scale(1.05)`;
+            // Desktop Mouse Events
+            card.addEventListener('mousemove', (e) => applyTilt(card, e.clientX, e.clientY));
+            card.addEventListener('mouseleave', () => resetTilt(card));
+
+            // Mobile Touch Events
+            card.addEventListener('touchmove', (e) => {
+                // passive: true is used implicitly by modern browsers, avoiding scrolling interference
+                const touch = e.touches[0];
+                applyTilt(card, touch.clientX, touch.clientY);
             });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
-            });
+            card.addEventListener('touchend', () => resetTilt(card));
         });
 
-        // 4. Projects Filtering System (نظام الفلترة الجديد)
+        // 4. Projects Filtering System
         const filterBtns = document.querySelectorAll('.filter-btn');
         const cards = document.querySelectorAll('.project-card');
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // إزالة التفعيل عن الأزرار الأخرى وتفعيله على الزر المضغوط
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
                 const filterValue = btn.getAttribute('data-filter');
 
-                // إظهار أو إخفاء المشاريع بناءً على التصنيف
                 cards.forEach(card => {
                     const category = card.getAttribute('data-category');
                     if (filterValue === 'all' || filterValue === category) {
                         card.style.display = 'block';
+                        // Reset animation so it replays
+                        card.style.animation = 'none';
+                        setTimeout(() => card.style.animation = 'fadeIn 0.5s ease-in-out', 10);
                     } else {
                         card.style.display = 'none';
                     }
